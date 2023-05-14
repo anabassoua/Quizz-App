@@ -1,11 +1,19 @@
-import styled from "styled-components"
-import { useState, useEffect } from 'react'
-
+import styled from "styled-components";
+import { useState, useEffect } from "react";
 
 const Quizz = () => {
-  return (
-    <h1>Quizz</h1>
-  )
-}
+  useEffect(() => {
+    fetch("https://opentdb.com/api.php?amount=10")
+      .then((res) => res.json())
+      .then((resData) => {
+        console.log(resData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-export default Quizz
+  return <h1>Quizz</h1>;
+};
+
+export default Quizz;
