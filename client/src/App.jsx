@@ -1,12 +1,11 @@
 import { useState } from 'react'
+import Quizz from './Quizz'
 
 const App = () => {
   const [count, setCount] = useState(0)
 
   return (
-    <h1>
-      heyyyyyyyyy
-    </h1>
+    <Quizz />
   )
 }
 
