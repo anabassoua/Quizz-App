@@ -18,9 +18,18 @@ const Quizz = () => {
       });
   }, []);
 
-  return quizzes.map((quizz, index) => {
-    return <div key={index}>{decode(quizz.question)}</div>;
-  });
+  return (
+    <div>
+      <h1>Quizzle Of The Day 🤖</h1>
+      {/*Box of question below*/}
+      {quizzes.map((quizz, index) => {
+        return <Box key={index}>{decode(quizz.question)}</Box>;
+      })}
+    </div>
+  );
 };
 
+const Box = styled.div`
+  display: flex;
+`;
 export default Quizz;
