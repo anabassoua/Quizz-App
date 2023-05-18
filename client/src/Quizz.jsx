@@ -6,6 +6,7 @@ import { decode } from "html-entities";
 const Quizz = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [currentQ, setCurrentQ] = useState(0);
+  const [gameFinished, setGameFinished] = useState(false);
 
   useEffect(() => {
     fetch("https://opentdb.com/api.php?amount=10")
@@ -26,11 +27,17 @@ const Quizz = () => {
   const handleClick = (answer) => {
     if (answer === quizzes[currentQ].correct_answer) {
       console.log("good answer");
+      if (currentQ === quizzes.length - 1) {
+        setGameFinished(true);
+      } else {
+        setCurrentQ(currentQ + 1);
+      }
     } else {
       console.log("wrong answer");
     }
     // console.log("clicked");
   };
+
   const allAnswers = [
     ...quizzes[currentQ].incorrect_answers,
     quizzes[currentQ].correct_answer,
@@ -45,15 +52,22 @@ const Quizz = () => {
     <Div>
       <Header>Quizzle Of The Day 🤖</Header>
       <Container>
-        <h2>{quizzes.length > 0 && decode(quizzes[currentQ].question)}</h2>
-
-        {randomAnswers.map((answer, index) => {
-          return (
-            <Buttons key={index} onClick={() => handleClick(answer)}>
-              {decode(answer)}
-            </Buttons>
-          );
-        })}
+        {gameFinished ? (
+          <>
+            <h1>Game Over</h1>
+            <button>Restart Game</button>
+          </>
+        ) : (
+          <>
+            {randomAnswers.map((answer, index) => {
+              return (
+                <Buttons key={index} onClick={() => handleClick(answer)}>
+                  {decode(answer)}
+                </Buttons>
+              );
+            })}
+          </>
+        )}
       </Container>
     </Div>
   );
@@ -70,6 +84,7 @@ const Header = styled.h1`
 const Buttons = styled.button`
   margin-bottom: 15px;
   border: 1px solid gray;
+  border-radius: 5px;
   width: 400px;
   height: 100px;
   background: none;
