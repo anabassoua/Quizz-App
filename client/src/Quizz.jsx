@@ -7,6 +7,7 @@ const Quizz = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [currentQ, setCurrentQ] = useState(0);
   const [gameFinished, setGameFinished] = useState(false);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
 
   useEffect(() => {
     fetch("https://opentdb.com/api.php?amount=10")
@@ -25,19 +26,19 @@ const Quizz = () => {
   }
 
   const handleClick = (answer) => {
-    if (answer === quizzes[currentQ].correct_answer) {
-      console.log("good answer");
-      setCurrentQ(currentQ + 1);
-    } else {
-      console.log("wrong answer");
-    }
+    setSelectedAnswer(answer);
+    setTimeout(() => {
+      if (answer === quizzes[currentQ].correct_answer) {
+        setCurrentQ(currentQ + 1);
+      }
 
-    if (currentQ === quizzes.length - 1) {
-      setGameFinished(true);
-    } else {
-      setCurrentQ(currentQ + 1);
-    }
-    // console.log("clicked");
+      if (currentQ === quizzes.length - 1) {
+        setGameFinished(true);
+      } else {
+        setCurrentQ(currentQ + 1);
+        setSelectedAnswer(null);
+      }
+    }, 1000);
   };
 
   const allAnswers = [
@@ -63,8 +64,20 @@ const Quizz = () => {
           <>
             <h2>{quizzes.length > 0 && decode(quizzes[currentQ].question)}</h2>
             {randomAnswers.map((answer, index) => {
+              const isCorrect = answer === quizzes[currentQ].correct_answer;
+              const isSelected = answer === selectedAnswer;
               return (
-                <Buttons key={index} onClick={() => handleClick(answer)}>
+                <Buttons
+                  key={index}
+                  onClick={() => handleClick(answer)}
+                  style={{
+                    background: isSelected
+                      ? isCorrect
+                        ? "green"
+                        : "red"
+                      : "none",
+                  }}
+                >
                   {decode(answer)}
                 </Buttons>
               );
