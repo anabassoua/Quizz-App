@@ -27,13 +27,15 @@ const Quizz = () => {
   const handleClick = (answer) => {
     if (answer === quizzes[currentQ].correct_answer) {
       console.log("good answer");
-      if (currentQ === quizzes.length - 1) {
-        setGameFinished(true);
-      } else {
-        setCurrentQ(currentQ + 1);
-      }
+      setCurrentQ(currentQ + 1);
     } else {
       console.log("wrong answer");
+    }
+
+    if (currentQ === quizzes.length - 1) {
+      setGameFinished(true);
+    } else {
+      setCurrentQ(currentQ + 1);
     }
     // console.log("clicked");
   };
@@ -59,6 +61,7 @@ const Quizz = () => {
           </>
         ) : (
           <>
+            <h2>{quizzes.length > 0 && decode(quizzes[currentQ].question)}</h2>
             {randomAnswers.map((answer, index) => {
               return (
                 <Buttons key={index} onClick={() => handleClick(answer)}>
