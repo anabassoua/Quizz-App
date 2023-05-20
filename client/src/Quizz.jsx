@@ -10,6 +10,8 @@ const Quizz = () => {
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [count, setCount] = useState(0);
   const [score, setScore] = useState(0);
+  // lets use a state to handle better the asynchronous behaviour of the setTimeout
+  const [showAnswer, setShowAnswer] = useState(false);
 
   useEffect(() => {
     fetch("https://opentdb.com/api.php?amount=10")
@@ -34,9 +36,9 @@ const Quizz = () => {
 
   const handleClick = (answer) => {
     setSelectedAnswer(answer);
+    setShowAnswer(true);
     setTimeout(() => {
       if (answer === quizzes[currentQ].correct_answer) {
-        setCurrentQ(currentQ + 1);
         setCount(count + 1);
       }
 
@@ -44,10 +46,11 @@ const Quizz = () => {
         setGameFinished(true);
         setScore(Math.floor((count / (quizzes.length - 1)) * 100));
         setCurrentQ(-1);
+        setSelectedAnswer(null);
       } else {
         setCurrentQ(currentQ + 1);
-        setSelectedAnswer(null);
       }
+      setShowAnswer(false);
     }, 1000);
   };
 
@@ -76,16 +79,20 @@ const Quizz = () => {
             {quizzes[currentQ].allAnswers.map((answer, index) => {
               const isCorrect = answer === quizzes[currentQ].correct_answer;
               const isSelected = answer === selectedAnswer;
+              let colorAnswer;
+              if (showAnswer) {
+                if (isSelected) {
+                  colorAnswer = isCorrect ? "green" : "red";
+                } else if (selectedAnswer !== null && isCorrect) {
+                  colorAnswer = "green";
+                }
+              }
               return (
                 <Buttons
                   key={index}
                   onClick={() => handleClick(answer)}
                   style={{
-                    background: isSelected
-                      ? isCorrect
-                        ? "green"
-                        : "red"
-                      : "none",
+                    background: colorAnswer,
                   }}
                 >
                   {decode(answer)}
