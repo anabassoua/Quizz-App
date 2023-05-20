@@ -42,23 +42,32 @@ const Quizz = () => {
 
       if (currentQ === quizzes.length - 1) {
         setGameFinished(true);
-        setScore((count / quizzes.length) * 100);
+        setScore(Math.floor((count / (quizzes.length - 1)) * 100));
+        setCurrentQ(-1);
       } else {
         setCurrentQ(currentQ + 1);
-        // setSelectedAnswer(null);
+        setSelectedAnswer(null);
       }
     }, 1000);
+  };
+
+  const handleRestart = () => {
+    setGameFinished(false);
+    setCurrentQ(0);
+    setScore(0);
+    setCount(0);
   };
 
   return (
     <Div>
       <Header>Quizzle Of The Day 🤖</Header>
+      <h3>{!gameFinished && `Question ${currentQ + 1}/${quizzes.length}`}</h3>
       <h2>Score : {count}</h2>
       <Container>
         {gameFinished ? (
           <>
             <h1>Game Over</h1>
-            <button>Restart Game</button>
+            <button onClick={handleRestart}>Restart Game</button>
             <h2>You have a score of {score}%</h2>
           </>
         ) : (

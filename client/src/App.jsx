@@ -1,12 +1,13 @@
-import { useState } from 'react'
-import Quizz from './Quizz'
+import Quizz from "./Quizz";
+import GlobalStyles from "./GlobalStyles";
 
 const App = () => {
-  const [count, setCount] = useState(0)
-
   return (
-    <Quizz />
-  )
-}
+    <>
+      <GlobalStyles />
+      <Quizz />
+    </>
+  );
+};
 
-export default App
+export default App;
