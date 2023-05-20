@@ -8,6 +8,8 @@ const Quizz = () => {
   const [currentQ, setCurrentQ] = useState(0);
   const [gameFinished, setGameFinished] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [count, setCount] = useState(0);
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
     fetch("https://opentdb.com/api.php?amount=10")
@@ -35,35 +37,29 @@ const Quizz = () => {
     setTimeout(() => {
       if (answer === quizzes[currentQ].correct_answer) {
         setCurrentQ(currentQ + 1);
+        setCount(count + 1);
       }
 
       if (currentQ === quizzes.length - 1) {
         setGameFinished(true);
+        setScore((count / quizzes.length) * 100);
       } else {
         setCurrentQ(currentQ + 1);
-        setSelectedAnswer(null);
+        // setSelectedAnswer(null);
       }
     }, 1000);
   };
 
-  // const allAnswers = [
-  //   ...quizzes[currentQ].incorrect_answers,
-  //   quizzes[currentQ].correct_answer,
-  // ];
-  // console.log("test", allAnswers);
-
-  // const randomAnswers = allAnswers.sort(() => Math.random() - 0.5);
-
-  // console.log("random", randomAnswers);
-
   return (
     <Div>
       <Header>Quizzle Of The Day 🤖</Header>
+      <h2>Score : {count}</h2>
       <Container>
         {gameFinished ? (
           <>
             <h1>Game Over</h1>
             <button>Restart Game</button>
+            <h2>You have a score of {score}%</h2>
           </>
         ) : (
           <>
