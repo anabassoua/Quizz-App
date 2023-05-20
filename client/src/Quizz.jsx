@@ -13,8 +13,13 @@ const Quizz = () => {
     fetch("https://opentdb.com/api.php?amount=10")
       .then((res) => res.json())
       .then((resData) => {
-        console.log(resData.results);
-        setQuizzes(resData.results);
+        // We shuffling the answers and appending new property inside the function. its easier this way to shuffle everything at this step in order to get all the answers shuffled for the duration of the quizz.
+        const shuffledAnswers = resData.results.map((answ) => {
+          const answers = [...answ.incorrect_answers, answ.correct_answer];
+          const randomAnswers = answers.sort(() => Math.random() - 0.5);
+          return { ...answ, allAnswers: randomAnswers };
+        });
+        setQuizzes(shuffledAnswers);
       })
       .catch((err) => {
         console.log(err);
@@ -41,15 +46,15 @@ const Quizz = () => {
     }, 1000);
   };
 
-  const allAnswers = [
-    ...quizzes[currentQ].incorrect_answers,
-    quizzes[currentQ].correct_answer,
-  ];
-  console.log("test", allAnswers);
+  // const allAnswers = [
+  //   ...quizzes[currentQ].incorrect_answers,
+  //   quizzes[currentQ].correct_answer,
+  // ];
+  // console.log("test", allAnswers);
 
-  const randomAnswers = allAnswers.sort(() => Math.random() - 0.5);
+  // const randomAnswers = allAnswers.sort(() => Math.random() - 0.5);
 
-  console.log("random", randomAnswers);
+  // console.log("random", randomAnswers);
 
   return (
     <Div>
@@ -63,7 +68,7 @@ const Quizz = () => {
         ) : (
           <>
             <h2>{quizzes.length > 0 && decode(quizzes[currentQ].question)}</h2>
-            {randomAnswers.map((answer, index) => {
+            {quizzes[currentQ].allAnswers.map((answer, index) => {
               const isCorrect = answer === quizzes[currentQ].correct_answer;
               const isSelected = answer === selectedAnswer;
               return (
