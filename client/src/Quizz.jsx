@@ -116,11 +116,11 @@ const Header = styled.h1`
 
 const Buttons = styled.button`
   margin-bottom: 15px;
-  border: 1px solid gray;
+  border: 1px solid #fff;
   border-radius: 5px;
   width: 400px;
   height: 100px;
-  background: none;
+  background-color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -129,6 +129,7 @@ const Buttons = styled.button`
 
 const Container = styled.div`
   border: 1px solid green;
+  background-color: #faae7b;
   padding: 15px;
   width: 700px;
   height: 300px;
